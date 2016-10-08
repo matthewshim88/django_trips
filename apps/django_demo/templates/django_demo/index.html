@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    {% load staticfiles %}
+     <link rel='stylesheet' href="{%static 'django_demo/css/bootstrap.min.css' %}" media="screen" title="bootstrap" charset="utf-8">
+  </head>
+  <body>
+    <div class='mainBox'>
+      <h2>Hello {{this_user.first_name}} !</h2>
+      <a href="{%url 'travel:logOut'%}" class="btn btn-default">Log Out</a>
+      {% if messages %}
+      <ul class='messages'>
+          {% for message in messages%}
+          <li{% if message.tags%} class="{{message.tags}}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+    <div class='container'>
+      <h3>Your Trip Schedules</h3>
+        <table class='table table-bordered table-hover'>
+          <thead>
+              <tr>
+                  <th>Destination</th>
+                  <th>Travel Start Date</th>
+                  <th>Travel End Date</th>
+                  <th>Plan</th>
+              </tr>
+          </thead>
+            {% for trip in my_trips %}
+            <tr>
+              <td> <a href="{% url 'travel:showTrip' id=trip.id %}">{{ trip.destination }}</a> </td>
+              <td> {{ trip.travel_date_from }}</td>
+              <td> {{trip.travel_date_to }}</td>
+              <td> {{ trip.description }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class='container'>
+        <h3>Other Users' Travel Plans</h3>
+        <table class='table table-bordered table-hover'>
+          <thead>
+              <tr>
+                  <th>Name</th>
+                  <th>Destination</th>
+                  <th>Travel Start Date</th>
+                  <th>Travel End Date</th>
+                  <th>Plan</th>
+                  <th>Do you want to Join?</th>
+              </tr>
+
+          </thead>
+          {% for trip in other_trips %}
+          <tr>
+              <td> {{ trip.added_by.first_name }}</td>
+              <td> <a href="{% url 'travel:showTrip' id=trip.id %}">{{ trip.destination }}</a></td>
+              <td> {{ trip.travel_date_from }}</td>
+              <td> {{ trip.travel_date_to }} </td>
+              <td> {{ trip.description }} </td>
+              <td>
+                  <form action="{% url 'travel:join_trip' id=trip.id %}" method='POST'>
+                      {% csrf_token %}
+                      <input type='submit' value='Join'>
+                  </form>
+              </td>
+          </tr>
+          {% endfor %}
+        </table>
+    </div>
+    <a href="{% url 'travel:newPlan' %}" class="btn btn-default">Add Travel Plan</a>
+  </body>
+</html>

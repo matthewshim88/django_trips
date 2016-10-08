@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    {% load staticfiles %}
+    <link rel='stylesheet' href="{%static 'django_demo/css/bootstrap.min.css' %}" media="screen" title="bootstrap" charset="utf-8">
+  </head>
+  <body>
+    <a href="{% url 'travel:index' %}" class="btn btn-default">Home</a>
+    <a href="{% url 'travel:logOut'%}" class="btn btn-default">Log Out</a>
+      <div class='container'>
+          <h2>Add a Trip</h2>
+          {% if messages %}
+          <ul class='messages'>
+              {% for message in messages%}
+              <li{% if message.tags%} class="{{message.tags}}"{% endif %}>{{ message }}</li>
+              {% endfor %}
+          </ul>
+          {% endif %}
+          <form action="{% url 'travel:newTrip' %}" method="POST">
+            {% csrf_token %}
+            <p>Destination: <input type='text' name='destination'></p>
+            <p>Description: <input type='text' name='description'></p>
+            <p>Travel Date From: <input type='date' name='travel_date_from'></p>
+            <p>Travel Date To: <input type='date' name='travel_date_to'></p>
+            <input type='submit' value='addTrip' class="btn btn-default">
+          </form>
+      </div>
+  </body>
+</html>

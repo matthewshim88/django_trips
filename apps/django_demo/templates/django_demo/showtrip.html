@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    {% load staticfiles %}
+     <link rel='stylesheet' href="{%static 'django_demo/css/bootstrap.min.css' %}" media="screen" title="bootstrap" charset="utf-8">
+  </head>
+  <body>
+    <a href="{% url 'travel:index' %}" class="btn btn-default">Home</a>
+    <a href="{% url 'travel:logOut'%}" class="btn btn-default">Log Out</a>
+    <div class='container'>
+      <h3>{{ this_trip.destination }}</h3>
+      <p>Planned by: {{this_trip.added_by.first_name}}</p>
+      <p>Description: {{this_trip.description}}</p>
+      <p>Travel Date From: {{this_trip.travel_date_from}}</p>
+      <p>Travel Date To: {{this_trip.travel_date_to}}</p>
+    </div>
+    <div class='container'>
+      <h3>Other users' joining the trip:</h3>
+        {% for users in other_users %}
+          <p> {{ users.first_name }} </p>
+        {% endfor %}
+    </div>
+  </body>
+</html>
